@@ -1,6 +1,6 @@
 import pandas as pd
 
-from developer_scraper import get_developer_page_info
+from scraper.blueprint_scraper import get_developer_page_info
 
 
 def fill_incomplete_data(df:pd.DataFrame)->pd.DataFrame:

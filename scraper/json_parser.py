@@ -18,11 +18,11 @@ def reformat_data(json_file:str)->list[dict]:
 
     for developer in data:
         developer_url = f"{BASE_URL}developer/detail/{developer['id'].lower()}"
-        property_url = f"{API_PROJECT_DEVELOPER}?dev_id={developer['id']}&Page=1&Limit=50"
+        project_url = f"{API_PROJECT_DEVELOPER}?dev_id={developer['id']}&Page=1&Limit=50"
 
         # Add URL for scraping
         developer['developer_url'] = developer_url
-        developer['property_url'] = property_url
+        developer['project_url'] = project_url
 
         developer_profile.append(developer)
         
