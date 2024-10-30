@@ -14,7 +14,6 @@ def parse_profile(fetcher:WebFetcher, developer_url:str)->dict:
 def main(HEADERS:str, DATA:str):
     # Read data from JSON file
     profile = reformat_data(DATA)
-    profile = profile[0:2]  # REMOVE THIS AFTER SURE THAT YOUR SCRIPT WORKS CORRECTLY
 
     # To track scraping progress
     counter = len(profile)
