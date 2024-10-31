@@ -1,41 +1,54 @@
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 from scraper.src.json_parser import reformat_data
 from scraper.src.web_fetcher import WebFetcher
 from scraper.src.profile_page_parser import ProfileParser
 
 
-def parse_profile(fetcher:WebFetcher, developer_url:str)->dict:
+def parse_profile(fetcher:WebFetcher, profile_url:str)->dict:
     # Get HTML text
-    profile_page = fetcher.get_profile(developer_url)
+    profile_page = fetcher.get_profile(profile_url)
     # Parse data
     profile_info = ProfileParser(profile_page).profile_info()
 
     return profile_info
+
+def execute_row(fetcher:WebFetcher, row:tuple):
+    profile_url = row[0]
+    project_url = row[1]
+    
+    profile_info = parse_profile(fetcher, profile_url)
+    project_info = fetcher.get_project(project_url)
+
+    return profile_info, project_info
     
 def main(HEADERS:str, DATA:str):
     # Read data from JSON file
-    profile = reformat_data(DATA)
-
-    # To track scraping progress
-    counter = len(profile)
+    profiles = reformat_data(DATA)
+    urls = [(profile['profile_url'], profile['project_url']) for profile in profiles]
 
     # Container all result
-    projects = []
+    result_projects = []
+    result_profiles = []
 
     fetcher = WebFetcher(HEADERS)
-    for index, developer in enumerate(profile):
-        print(f"Processing {index+1} of {counter} profiles")
-        developer_url = developer['developer_url']
-        project_url = developer['project_url']
 
-        # Parse developer profile
-        profile_info = parse_profile(fetcher, developer_url)
-        # Merge new data with origin data
-        developer.update(profile_info)
+    with ThreadPoolExecutor() as executor:
+        futures = {executor.submit(execute_row, fetcher, url) for url in urls}
 
-        # Parse developer project
-        project = fetcher.get_project(project_url)
-        projects.extend(project)
-    
-    return profile, projects
+        max = len(urls)
+        counter = 1
+
+        for future in as_completed(futures):
+
+            profile, project = future.result()
+
+            profiles[counter].update(profile)
+            result_projects.extend(project)
+
+            print(f"Progress: {counter}/{max}... ({counter/max*100:.2f}%)")
+            counter += 1
+
+    return profiles, result_projects
 
     

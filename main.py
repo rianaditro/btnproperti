@@ -1,5 +1,3 @@
-import json
-
 import pandas as pd
 
 from scraper.main_scraper import main as scraper

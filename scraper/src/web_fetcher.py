@@ -46,10 +46,7 @@ class WebFetcher:
             return response
         
         except Exception as e:
-            if response.status_code == 404: # This might because the developer has no listing project
-                logging.info(f"404: No Data for {url}")
-            else:
-                logging.warning(e)
+            logging.warning(e)
             return None
 
     def get_profile(self, url:str)->str:
