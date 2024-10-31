@@ -1,21 +1,15 @@
-import logging
 import json
+import logging
 
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
+from scraper.src.logger import config_logging
+
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    datefmt='%Y-%m-%d %H:%M:%S',
-    handlers=[
-        logging.FileHandler("scraper.log"),
-        # logging.StreamHandler() # Console output
-    ]
-)
+config_logging()
 
 
 class WebFetcher:

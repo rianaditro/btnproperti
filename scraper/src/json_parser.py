@@ -1,4 +1,11 @@
 import json
+import logging
+
+from scraper.src.logger import config_logging
+
+
+# Configure logging
+config_logging()
 
 
 
@@ -23,6 +30,9 @@ def reformat_data(json_file:str)->list[dict]:
         # Add URL for scraping
         developer['profile_url'] = profile_url
         developer['project_url'] = project_url
+
+        # Collected data
+        logging.info(f"Data Updated: {developer}")
 
         developer_profile.append(developer)
         

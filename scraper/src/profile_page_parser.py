@@ -1,5 +1,12 @@
+import logging
+
 from bs4 import BeautifulSoup as bs
 
+from scraper.src.logger import config_logging
+
+
+# Configure logging
+config_logging()
 
 
 class ProfileParser:
@@ -32,5 +39,7 @@ class ProfileParser:
             'speciality_service': developer_speciality_service,
             'area': developer_area
         }
+
+        logging.info(f'Profile info: {developer_info}')
 
         return developer_info
