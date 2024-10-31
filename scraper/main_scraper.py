@@ -54,6 +54,7 @@ def main(HEADERS:str, DATA:str):
             result_projects.extend(project)
 
             logging.info(f"Profile: {profiles[counter-1]}")
+            logging.info(f"Project: {len(project)}")
 
             print(f"Progress: {counter}/{max}... ({counter/max*100:.2f}%)")
             counter += 1
