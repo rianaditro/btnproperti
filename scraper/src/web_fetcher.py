@@ -57,3 +57,4 @@ class WebFetcher:
         except AttributeError:
             logging.warning(f"Failed to fetch {url}")
             return []
+        
